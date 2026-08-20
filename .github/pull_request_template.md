@@ -39,6 +39,23 @@ Related to #
 - [ ] Estados de erro, vazio, carregamento e recuperação foram considerados quando aplicáveis.
 - [ ] O contexto permanente foi atualizado quando a decisão afetou o projeto.
 
+### Interface, carregamento e movimento
+
+<!-- Para PR sem interface, marque "Não aplicável" e explique nas evidências. -->
+
+- [ ] Não aplicável: este PR não cria nem altera interface.
+- [ ] Lazy loading foi aplicado onde reduz custo sem atrasar a tarefa principal.
+- [ ] Skeletons preservam a geometria do conteúdo durante esperas perceptíveis.
+- [ ] Ações assíncronas possuem progresso, bloqueio de duplicidade e feedback de sucesso ou erro.
+- [ ] Entradas, saídas e transições são consistentes e proporcionais à frequência de uso.
+- [ ] A experiência funciona por teclado e com `prefers-reduced-motion: reduce`.
+- [ ] A interface foi revisada com a skill Design Motion Principles antes de sair de draft.
+- [ ] Elementos bruscos, travados, genéricos, inconsistentes ou amadores encontrados na revisão foram corrigidos ou registrados como limitação.
+
+### Evidências da revisão de interface
+
+<!-- Informe navegadores/viewports, cenários, relatório de audit, capturas ou "Não aplicável". -->
+
 ## Riscos
 
 <!-- Possíveis efeitos adversos, impacto operacional, financeiro, técnico, de segurança ou privacidade. -->

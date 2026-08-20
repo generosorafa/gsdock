@@ -151,6 +151,34 @@ O GSDock deve ter identidade própria. A área operacional precisa ser mais ráp
 
 Telas iniciais previstas: Dashboard, Separação do dia, Endereçamento, Produtos, Divergências e Integrações.
 
+### Movimento, carregamento e feedback
+
+Toda interface nova ou alterada deve aplicar a skill **Design Motion Principles** em dois momentos:
+
+1. **Create:** durante a implementação, para decidir se cada interação deve animar e como fazê-lo.
+2. **Audit:** antes de retirar o PR de draft, para revisar a experiência como designer de produto sênior e corrigir tudo que parecer brusco, travado, genérico, inconsistente ou amador.
+
+O GSDock é uma ferramenta operacional de alta frequência. A ponderação padrão é Emil Kowalski como perspectiva principal, Jakub Krehel como secundária e Jhey Tompkins somente em onboarding, estados vazios ou momentos raros de descoberta. A Issue deve justificar qualquer ponderação diferente.
+
+Requisitos obrigatórios para interfaces:
+
+- usar lazy loading em rotas, módulos pesados, mídia e dados não críticos quando reduzir o carregamento inicial sem atrasar a tarefa principal;
+- manter navegação e controles críticos de separação disponíveis sem depender de carregamento tardio desnecessário;
+- exibir skeleton screens que preservem a geometria aproximada do conteúdo final quando o carregamento tiver duração perceptível; não substituir todo carregamento por spinner genérico;
+- oferecer entrada e saída suaves para telas, cards, modais, listas e estados condicionais quando isso comunicar continuidade; saídas devem ser mais discretas que entradas;
+- aplicar o gate de frequência: ações repetidas muitas vezes por sessão devem ter movimento mínimo ou instantâneo, e ações iniciadas por teclado não devem ser animadas;
+- mostrar progresso no próprio elemento que iniciou uma ação assíncrona, preservar sua largura, impedir envio duplicado e expor estado acessível com `aria-busy` ou equivalente;
+- fornecer feedback visual inequívoco para sucesso, erro, aviso, seleção, foco, indisponibilidade, vazio, offline e tentativa de repetição;
+- manter tokens consistentes de duração e easing no design system, normalmente entre 120 ms e 250 ms na área operacional e abaixo de 300 ms, salvo componente que justifique outro comportamento;
+- usar spring sem bounce ou curva `cubic-bezier` deliberada; não usar `ease` ou `ease-in-out` genérico como padrão de produção;
+- animar preferencialmente `transform`, `opacity`, `filter` ou `clip-path`; não animar `width`, `height`, `top`, `left`, margem ou padding quando houver alternativa sem reflow;
+- garantir que transições acionadas repetidamente sejam interrompíveis e não formem filas ou saltos;
+- respeitar `prefers-reduced-motion` em toda animação e manter tarefas plenamente compreensíveis e executáveis com movimento desativado;
+- evitar parallax, zoom amplo, rotação, loops de atenção, pulsos contínuos, bounce decorativo, hover-scale em tudo e stagger excessivo;
+- usar skeleton, progresso e animação para comunicar estado real; nunca simular avanço ou prolongar artificialmente uma espera.
+
+Antes de considerar uma interface concluída, testar ao menos: carregamento lento, resposta vazia, erro e nova tentativa, operação rápida, cliques repetidos, navegação por teclado, viewport desktop e móvel e `prefers-reduced-motion: reduce`. O PR deve anexar evidência da revisão de motion e listar os problemas encontrados e corrigidos. Se ainda não existir interface executável, registrar **não aplicável** em vez de afirmar que ela foi auditada.
+
 ## Priorização
 
 - **P0:** perda de dados, fraude, invasão, ilegalidade ou operação crítica parada.
