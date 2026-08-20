@@ -1,0 +1,53 @@
+name: Correção
+description: Registrar um defeito comprovado ou regressão.
+title: "[Correção] "
+body:
+  - type: markdown
+    attributes:
+      value: "Use este formulário somente quando houver comportamento incorreto observado."
+  - type: textarea
+    id: problema
+    attributes:
+      label: Problema
+      description: Descreva o defeito e onde ele ocorre.
+    validations:
+      required: true
+  - type: textarea
+    id: evidencia
+    attributes:
+      label: Evidência e reprodução
+      description: Informe dados, passos, logs ou capturas sem segredos nem dados pessoais.
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Comportamento esperado
+    validations:
+      required: true
+  - type: textarea
+    id: impacto
+    attributes:
+      label: Impacto e prioridade sugerida
+      description: Avalie impacto operacional, financeiro, comercial, técnico, de segurança ou privacidade.
+    validations:
+      required: true
+  - type: textarea
+    id: aceite
+    attributes:
+      label: Critérios de aceite
+      placeholder: "- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: validacao
+    attributes:
+      label: Plano de validação
+    validations:
+      required: true
+  - type: textarea
+    id: riscos
+    attributes:
+      label: Riscos, dependências e reversão
+    validations:
+      required: true

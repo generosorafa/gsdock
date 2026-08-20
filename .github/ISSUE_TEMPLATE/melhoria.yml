@@ -1,0 +1,42 @@
+name: Melhoria
+description: Aprimorar qualidade, segurança, desempenho, UX ou processo existente.
+title: "[Melhoria] "
+body:
+  - type: textarea
+    id: oportunidade
+    attributes:
+      label: Problema ou oportunidade
+      description: Explique a limitação atual e apresente evidências quando disponíveis.
+    validations:
+      required: true
+  - type: textarea
+    id: objetivo
+    attributes:
+      label: Objetivo e resultado esperado
+    validations:
+      required: true
+  - type: textarea
+    id: escopo
+    attributes:
+      label: Escopo e fora de escopo
+    validations:
+      required: true
+  - type: textarea
+    id: aceite
+    attributes:
+      label: Critérios de aceite
+      placeholder: "- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: validacao
+    attributes:
+      label: Validação e métricas
+    validations:
+      required: true
+  - type: textarea
+    id: riscos
+    attributes:
+      label: Riscos, dependências, limitações e reversão
+    validations:
+      required: true
