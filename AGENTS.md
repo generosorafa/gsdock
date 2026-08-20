@@ -102,6 +102,42 @@ Fluxos críticos devem testar casos normais, duplicidade, reprocessamento, cance
 
 Nenhum dashboard está concluído sem fórmula, fonte, frequência, responsável, estado de dado desatualizado e ação esperada para cada indicador.
 
+### Esteira obrigatória antes da branch principal
+
+Nenhum código entra na branch principal sem Pull Request e sem os checks obrigatórios aplicáveis aprovados. A referência detalhada é [`docs/quality-gates.md`](docs/quality-gates.md).
+
+A esteira cresce com o projeto, sem instalar ferramentas sem código para analisar:
+
+- **Agora:** validar governança do PR, Issue vinculada, classificação, seções obrigatórias e integridade do diff.
+- **Ao criar a stack:** build, typecheck, Biome, Commitlint, testes unitários e de integração tornam-se bloqueantes.
+- **Com arquitetura TypeScript definida:** adotar `arch-contract` para dependências, camadas e ciclos, sem duplicar o papel do linter.
+- **Com entrypoints estáveis:** ativar Knip para código, exports e dependências sem uso; corrigir configuração antes de suprimir achados.
+- **Com fluxos web executáveis:** Playwright cobre smoke e jornadas críticas; Endtest só complementa cross-browser, no-code ou monitoramento quando houver benefício demonstrado.
+- **Com cobertura real:** Codecov protege cobertura do patch; cobertura percentual não substitui qualidade das asserções.
+- **Com suíte madura:** Stryker mede a capacidade dos testes encontrarem defeitos, preferencialmente em módulos críticos e execução agendada para não tornar todo PR lento.
+
+OpenTelemetry é a base preferencial de instrumentação no backend. Sentry, Datadog e New Relic são backends ou plataformas sobrepostos: escolher um por ADR, custo, sinais necessários e operação; não instalar todos por padrão. Nenhuma telemetria pode expor segredos ou dados pessoais desnecessários.
+
+Checks bloqueantes não podem ser ignorados silenciosamente. Exceção temporária exige Issue, justificativa, risco, controle compensatório, responsável, prazo de remoção e aprovação explícita no PR. Proteção da branch deve exigir PR e os checks estáveis assim que estiverem disponíveis na branch principal.
+
+### Arquitetura e reutilização
+
+- Separar frontend e backend por fronteira de segurança, responsabilidades, variáveis e artefatos de deploy; o navegador nunca acessa segredos ou tokens do Bling.
+- Começar com a arquitetura mais simples que cumpra os requisitos atuais. Nova fila, serviço, banco, cache ou abstração precisa de gargalo medido ou risco concreto.
+- Definir budgets numéricos de performance para interface, API, jobs e sincronização antes da primeira entrega executável e medi-los na esteira.
+- Componentizar por responsabilidade e domínio desde o início, mantendo contratos pequenos e testáveis.
+- Aplicar DRY quando houver repetição estável e semanticamente igual; não generalizar apenas porque dois trechos parecem semelhantes.
+- Antes de criar componente, hook, serviço, utilitário ou padrão visual, pesquisar o repositório e o catálogo do design system. Estender ou compor o existente quando ele atender ao contrato.
+- Não reconstruir componente existente com pequenas diferenças visuais. Se o componente atual não servir, documentar no PR por que composição, variante ou extensão não resolvem.
+- Evitar módulos centrais que concentrem toda leitura, escrita ou integração. Medir latência, throughput, filas, concorrência, N+1, payload e limites externos antes de otimizar.
+
+### Segurança, operação e requisitos legais
+
+- Aplicar rate limit no backend por identidade, rota e risco, com limites específicos para autenticação, webhooks, exportações e operações caras; nunca confiar em limitação apenas no frontend.
+- Mudanças em autenticação, autorização, segredos, dados pessoais, webhooks, estoque ou integrações externas exigem revisão de segurança e testes negativos.
+- Termos de uso e política de privacidade precisam refletir o tratamento real de dados e ser revisados e aprovados por profissional jurídico qualificado antes de usuários reais ou produção. Agentes e desenvolvedores não podem declarar aprovação jurídica.
+- Deploy exige observabilidade mínima, rollback, correlação, alertas acionáveis e responsável pela resposta.
+
 ## Integração com o Bling
 
 - Usar API v3, OAuth 2.0 e JWT conforme documentação oficial atual.

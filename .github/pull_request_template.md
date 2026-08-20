@@ -56,6 +56,31 @@ Related to #
 
 <!-- Informe navegadores/viewports, cenários, relatório de audit, capturas ou "Não aplicável". -->
 
+## Esteira de qualidade
+
+- [ ] O check de governança do PR passou.
+- [ ] Build e typecheck passaram, quando aplicáveis.
+- [ ] Lint e formatação passaram, quando aplicáveis.
+- [ ] Testes unitários e de integração passaram, quando aplicáveis.
+- [ ] Testes end-to-end dos fluxos afetados passaram, quando aplicáveis.
+- [ ] Cobertura do patch e mutação foram avaliadas proporcionalmente ao risco.
+- [ ] Contratos arquiteturais, código sem uso e dependências foram verificados quando as ferramentas estiverem habilitadas.
+- [ ] Performance budget foi respeitado ou o impacto foi aprovado explicitamente.
+- [ ] Segurança, rate limit, observabilidade e rollback foram avaliados.
+
+### Reutilização e arquitetura
+
+<!-- Quais componentes, hooks, serviços e utilitários existentes foram pesquisados? Por que criar algo novo foi necessário? -->
+
+- [ ] Frontend e backend mantêm a fronteira de segurança e de responsabilidades.
+- [ ] Não foi introduzida abstração, serviço, fila, cache ou dependência sem necessidade demonstrada.
+- [ ] Componentes existentes foram reutilizados, compostos ou estendidos antes de criar equivalentes.
+- [ ] Duplicação remanescente ou abstração adiada foi uma decisão consciente e registrada.
+
+### Exceções temporárias
+
+<!-- Se algum check aplicável não passou, informe Issue, justificativa, risco, controle compensatório, responsável e prazo. Não use esta seção para omitir falhas. -->
+
 ## Riscos
 
 <!-- Possíveis efeitos adversos, impacto operacional, financeiro, técnico, de segurança ou privacidade. -->
