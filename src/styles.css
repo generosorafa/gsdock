@@ -1,0 +1,237 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  font-family: Inter, Aptos, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  --canvas: #f3f6f3;
+  --sidebar: #eaf0ec;
+  --surface: #ffffff;
+  --surface-muted: #f4f7f5;
+  --ink: #132d2d;
+  --ink-muted: #4e6664;
+  --ink-subtle: #7a908d;
+  --line: #dce5e1;
+  --line-strong: #cbd9d4;
+  --brand-wash: #f4faf8;
+  --brand-soft: #dcefeb;
+  --brand-line: #b9ddd5;
+  --brand-strong: #0d6b65;
+  --brand-deep: #074c49;
+  --success: #16734c;
+  --success-soft: #e1f3e9;
+  --warning: #936117;
+  --warning-soft: #fff3d9;
+  --warning-line: #efd497;
+  --danger: #b33b3b;
+  --danger-soft: #fce8e7;
+  --focus: #16887f;
+
+  --shadow-xs: 0 1px 2px rgb(15 47 45 / 0.06);
+  --shadow-sm: 0 2px 8px rgb(15 47 45 / 0.07);
+  --shadow-md: 0 10px 28px rgb(15 47 45 / 0.1);
+
+  --motion-fast: 160ms;
+  --motion-base: 220ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@property --progress {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--canvas);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--canvas);
+  background-image:
+    linear-gradient(rgb(13 107 101 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(13 107 101 / 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+button:disabled,
+select:disabled {
+  cursor: not-allowed;
+}
+
+::selection {
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+}
+
+.surface-card {
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.94);
+  box-shadow: var(--shadow-xs);
+}
+
+.eyebrow,
+.section-kicker {
+  color: var(--brand-strong);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.page-title {
+  margin-top: 0.35rem;
+  color: var(--ink);
+  font-size: clamp(1.75rem, 3vw, 2.45rem);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+}
+
+.page-description {
+  max-width: 46rem;
+  margin-top: 0.65rem;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.section-title {
+  margin-top: 0.2rem;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.75rem;
+  background: var(--brand-deep);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 800;
+  transform: translateY(-180%);
+  transition: transform var(--motion-fast) var(--ease-out);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.progress-ring {
+  --progress: 0deg;
+  display: grid;
+  width: 8.5rem;
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 999px;
+  background: conic-gradient(var(--brand-strong) var(--progress), var(--brand-soft) 0);
+  transition: --progress var(--motion-base) var(--ease-out);
+}
+
+.progress-ring--compact {
+  width: 5.2rem;
+}
+
+.progress-ring__inner {
+  display: flex;
+  width: calc(100% - 0.7rem);
+  aspect-ratio: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  background: white;
+}
+
+.progress-fill {
+  transform-origin: left center;
+  transition: transform var(--motion-base) var(--ease-out);
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #e4ebe8;
+}
+
+.skeleton::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.62), transparent);
+  content: "";
+  transform: translateX(-100%);
+  animation: skeleton-shimmer 1.25s linear infinite;
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0.01ms;
+    --motion-base: 0.01ms;
+    scroll-behavior: auto;
+  }
+
+  .skeleton::after,
+  .animate-spin {
+    animation: none;
+  }
+}
+
+[data-input-mode="keyboard"] {
+  --motion-fast: 0.01ms;
+  --motion-base: 0.01ms;
+  scroll-behavior: auto;
+}
+
+[data-input-mode="keyboard"] .skeleton::after,
+[data-input-mode="keyboard"] .animate-spin {
+  animation: none;
+}
+
+[data-input-mode="keyboard"] button:active {
+  transform: none;
+}
+
+@media (max-width: 639px) {
+  .surface-card {
+    border-radius: 0.9rem;
+  }
+
+  .page-description {
+    font-size: 0.84rem;
+  }
+}

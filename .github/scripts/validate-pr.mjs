@@ -31,9 +31,9 @@ function validatePullRequest(pullRequest) {
     }
   }
 
-  const checkedClassifications = [...body.matchAll(
-    /^- \[x\]\s+(Correção|Melhoria|Nova função)\s*$/gim,
-  )];
+  const checkedClassifications = [
+    ...body.matchAll(/^- \[x\]\s+(Correção|Melhoria|Nova função)\s*$/gim),
+  ];
 
   if (checkedClassifications.length !== 1) {
     failures.push("Marque exatamente uma classificação: Correção, Melhoria ou Nova função.");
@@ -64,8 +64,12 @@ Ativar checks da stack.
 
   assert.deepEqual(validatePullRequest({ body: validBody }), []);
   assert.ok(validatePullRequest({ body: "" }).length > 0);
-  assert.ok(validatePullRequest({ body: validBody.replace("Related to #17", "Sem issue") }).length > 0);
-  assert.ok(validatePullRequest({ body: validBody.replace("- [x] Melhoria", "- [ ] Melhoria") }).length > 0);
+  assert.ok(
+    validatePullRequest({ body: validBody.replace("Related to #17", "Sem issue") }).length > 0,
+  );
+  assert.ok(
+    validatePullRequest({ body: validBody.replace("- [x] Melhoria", "- [ ] Melhoria") }).length > 0,
+  );
   console.log("Self-test do validador de PR concluído com sucesso.");
 }
 
