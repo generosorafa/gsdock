@@ -187,6 +187,17 @@ O GSDock deve ter identidade própria. A área operacional precisa ser mais ráp
 
 Telas iniciais previstas: Dashboard, Separação do dia, Endereçamento, Produtos, Divergências e Integrações.
 
+### Stack visual aprovada para o protótipo
+
+- React, TypeScript, Vite e Tailwind CSS formam a base do frontend.
+- Componentes seguem a abordagem do shadcn/ui: código local, acessível, componível e customizado para a identidade do GSDock; não copiar tema pronto.
+- Lucide React é o catálogo inicial de ícones. Pesquisar esse catálogo antes de desenhar ou adicionar outro ícone.
+- CargoOS permanece como referência de clareza, densidade e acabamento, não como material a ser copiado.
+- Magic UI e Aceternity UI podem inspirar momentos raros de apresentação, mas efeitos chamativos, 3D e fundos animados não pertencem à operação diária sem uma necessidade demonstrada.
+- Figma e Google Stitch podem apoiar exploração e documentação visual, mas o código e os tokens versionados no repositório são a fonte da verdade da interface executável.
+
+O primeiro recorte navegável contém Dashboard, Separação do dia e Localização de estoque. Ele deve validar o modelo mental e a hierarquia antes da conexão real com o Bling.
+
 ### Movimento, carregamento e feedback
 
 Toda interface nova ou alterada deve aplicar a skill **Design Motion Principles** em dois momentos:

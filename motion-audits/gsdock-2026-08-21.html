@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GSDock — Motion Audit · design-motion-principles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: oklch(0.155 0.006 255);
+      --surface: oklch(0.195 0.007 255);
+      --surface-2: oklch(0.235 0.008 255);
+      --paper: oklch(0.945 0.004 255);
+      --paper-dim: oklch(0.800 0.006 255);
+      --muted: oklch(0.680 0.008 255);
+      --faint: oklch(0.505 0.008 255);
+      --line: oklch(0.95 0.01 255 / 0.09);
+      --line-strong: oklch(0.95 0.01 255 / 0.16);
+      --accent: var(--paper);
+      --accent-soft: var(--paper-dim);
+      --accent-tint: color-mix(in oklch, var(--paper) 12%, transparent);
+      --crit: oklch(0.655 0.185 25);
+      --crit-tint: oklch(0.655 0.185 25 / 0.15);
+      --imp: oklch(0.805 0.125 78);
+      --imp-tint: oklch(0.805 0.125 78 / 0.15);
+      --opp: oklch(0.745 0.135 152);
+      --opp-tint: oklch(0.745 0.135 152 / 0.15);
+      --t-good: var(--opp);
+      --t-mid: var(--imp);
+      --t-slow: var(--crit);
+      --s1: 4px;
+      --s2: 8px;
+      --s3: 12px;
+      --s4: 16px;
+      --s5: 24px;
+      --s6: 32px;
+      --s7: 48px;
+      --s8: 64px;
+      --s9: 96px;
+      --display: "Familjen Grotesk", system-ui, sans-serif;
+      --sans: "Public Sans", system-ui, sans-serif;
+      --mono: "Geist Mono", ui-monospace, monospace;
+    }
+    :root:has(#theme-light:checked) {
+      --ink: oklch(0.985 0.003 255);
+      --surface: oklch(0.965 0.004 255);
+      --surface-2: oklch(0.940 0.005 255);
+      --paper: oklch(0.180 0.006 255);
+      --paper-dim: oklch(0.330 0.008 255);
+      --muted: oklch(0.475 0.010 255);
+      --faint: oklch(0.640 0.009 255);
+      --line: oklch(0.180 0.010 255 / 0.12);
+      --line-strong: oklch(0.180 0.010 255 / 0.22);
+      --crit: oklch(0.555 0.195 25);
+      --crit-tint: oklch(0.555 0.195 25 / 0.12);
+      --imp: oklch(0.580 0.155 78);
+      --imp-tint: oklch(0.580 0.155 78 / 0.14);
+      --opp: oklch(0.555 0.140 152);
+      --opp-tint: oklch(0.555 0.140 152 / 0.13);
+      --t-good: var(--opp);
+      --t-mid: var(--imp);
+      --t-slow: var(--crit);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: var(--ink); color: var(--paper); font: 16px/1.65 var(--sans); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-underline-offset: 3px; }
+    code { color: var(--paper-dim); font: 0.86em var(--mono); }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: clamp(40px, 6vw, 72px) clamp(20px, 5vw, 40px) 96px; }
+    .vh { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .mono-label { color: var(--muted); font: 500 10.5px var(--mono); letter-spacing: .18em; text-transform: uppercase; }
+    .theme-switch { display: flex; justify-content: flex-end; margin-bottom: var(--s5); }
+    .theme-switch__pill { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 100px; overflow: hidden; }
+    .theme-switch label { padding: 6px 14px; color: var(--muted); cursor: pointer; font: 10.5px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+    #theme-dark:checked ~ .theme-switch__pill label[for="theme-dark"],
+    #theme-light:checked ~ .theme-switch__pill label[for="theme-light"] { background: var(--accent-tint); color: var(--accent-soft); }
+    header.doc { padding-bottom: var(--s7); margin-bottom: var(--s8); border-bottom: 1px solid var(--line); }
+    .eyebrow { display: inline-flex; align-items: center; gap: var(--s3); color: var(--muted); font: 11px var(--mono); letter-spacing: .2em; text-transform: uppercase; }
+    .eyebrow::before { width: 22px; height: 2px; background: var(--accent); content: ""; }
+    h1 { max-width: 18ch; margin: var(--s5) 0 var(--s4); font: 700 clamp(38px, 6vw, 60px)/1.02 var(--display); letter-spacing: -.025em; }
+    .lede { max-width: 66ch; color: var(--paper-dim); font-size: clamp(17px, 2.2vw, 19px); }
+    .meta-row, .stats { display: flex; flex-wrap: wrap; gap: clamp(20px, 4vw, 44px); margin-top: var(--s6); }
+    .meta-row .k { display: block; margin-bottom: 4px; }
+    .stats { margin-top: var(--s7); }
+    .stat .num { font: 600 40px/1 var(--display); font-variant-numeric: tabular-nums; }
+    .stat.crit .num { color: var(--crit); }
+    .stat.imp .num { color: var(--imp); }
+    .stat.opp .num { color: var(--opp); }
+    .stat .lbl { margin-top: var(--s2); }
+    section { margin-bottom: var(--s9); }
+    .assessment { padding-top: var(--s6); border-top: 1px solid var(--line); }
+    .assessment p { max-width: 38ch; margin: var(--s4) 0 0; font: 400 clamp(20px, 2.8vw, 26px)/1.42 var(--display); }
+    .sec-index { color: var(--accent-soft); font: 12px var(--mono); letter-spacing: .16em; }
+    h2 { margin: var(--s2) 0 var(--s4); font: 600 clamp(24px, 3.4vw, 32px)/1.1 var(--display); letter-spacing: -.02em; }
+    .section-sub { max-width: 74ch; margin: 0 0 var(--s6); color: var(--paper-dim); }
+    table { width: 100%; border: 1px solid var(--line); border-collapse: collapse; }
+    th, td { padding: var(--s4) var(--s5); border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    tr:last-child td { border-bottom: 0; }
+    th { color: var(--faint); font: 500 10.5px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    .lens-name { width: 29%; color: var(--paper); font-weight: 600; }
+    .lens-name .who { display: block; margin-top: 2px; color: var(--muted); font-size: 13.5px; font-weight: 400; }
+    .weight { display: block; margin-top: 6px; color: var(--accent-soft); font: 9.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .verdict { display: inline-flex; align-items: center; gap: 7px; color: var(--opp); font: 500 10.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .verdict::before { width: 8px; height: 8px; border-radius: 50%; background: currentColor; content: ""; }
+    .timing-grid { display: grid; grid-template-columns: 1fr 300px; gap: clamp(28px, 5vw, 56px); }
+    .timing-figure { width: 100%; height: auto; }
+    .key-list { display: grid; gap: 2px; padding: 0; margin: 0; list-style: none; }
+    .key-list li { display: grid; grid-template-columns: 22px 1fr auto; gap: var(--s3); padding: var(--s2) 0; border-bottom: 1px solid var(--line); }
+    .kn, .kt { font-family: var(--mono); font-size: 11px; }
+    .kt { color: var(--t-good); }
+    .timing-note { margin-top: var(--s5); padding-top: var(--s5); border-top: 1px solid var(--line); color: var(--paper-dim); font-size: 14px; }
+    .lens-sec { padding-top: var(--s6); border-top: 1px solid var(--line); }
+    .lens-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s4); }
+    .lens-head h3 { margin: 0; font: 600 clamp(22px, 3vw, 28px)/1.1 var(--display); }
+    .lens-chip { padding: 4px 10px; border: 1px solid var(--line-strong); border-radius: 100px; color: var(--accent-soft); font: 10px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+    .lens-block { margin: var(--s6) 0; }
+    .lens-list { display: grid; gap: var(--s3); max-width: 78ch; padding: 0; list-style: none; }
+    .lens-list li { display: grid; grid-template-columns: 22px 1fr; gap: var(--s2); color: var(--paper-dim); }
+    .good .mk, .opp .mk { color: var(--opp); }
+    .lens-empty { color: var(--faint); font-style: italic; }
+    .lens-take { padding: var(--s5); border-radius: 10px; background: var(--surface-2); }
+    .lens-take p { max-width: 72ch; margin: var(--s2) 0 0; }
+    .rec { margin-bottom: var(--s7); }
+    .tier-label { display: flex; align-items: center; gap: var(--s4); margin-bottom: var(--s4); }
+    .tier-label .rule { height: 1px; flex: 1; background: var(--line); }
+    .crit .tier-label .mono-label { color: var(--crit); }
+    .imp .tier-label .mono-label { color: var(--imp); }
+    .opp .tier-label .mono-label { color: var(--opp); }
+    .rec-table { font-size: 14px; }
+    .empty-row { color: var(--faint); font-style: italic; }
+    .ref-summary { padding: clamp(24px, 4vw, 40px); border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+    .ref-summary .big { margin: var(--s2) 0 0; font: 600 clamp(18px, 2.4vw, 22px) var(--display); }
+    .ref-summary .why { max-width: 68ch; color: var(--paper-dim); }
+    .ref-lean { display: grid; gap: var(--s3); padding: 0; list-style: none; }
+    .ref-lean li { display: grid; grid-template-columns: 130px 1fr; gap: var(--s4); padding-top: var(--s3); border-top: 1px solid var(--line); color: var(--paper-dim); font-size: 14px; }
+    .ref-lean strong { color: var(--paper); }
+    footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s3); padding-top: var(--s5); border-top: 1px solid var(--line); color: var(--faint); font: 11px var(--mono); }
+    @media (max-width: 860px) { .timing-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { th { display: none; } table, tbody, tr, td { display: block; } tr { padding: var(--s4); border-bottom: 1px solid var(--line); } td { padding: 3px 0; border: 0; } .lens-name { width: auto; } .ref-lean li { grid-template-columns: 1fr; } }
+    @media (prefers-reduced-motion: no-preference) { tbody tr { transition: border-color .2s ease; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="theme-switch" role="radiogroup" aria-label="Tema do relatório">
+      <input class="vh" type="radio" name="theme" id="theme-dark" checked>
+      <input class="vh" type="radio" name="theme" id="theme-light">
+      <div class="theme-switch__pill"><label for="theme-dark">Escuro</label><label for="theme-light">Claro</label></div>
+    </div>
+
+    <header class="doc">
+      <div class="eyebrow">Motion audit · design-motion-principles</div>
+      <h1>GSDock — rápido onde importa, calmo onde orienta</h1>
+      <p class="lede">Auditoria do protótipo operacional em React: Dashboard, Separação do dia e Localização de estoque. O foco foi evitar movimento ornamental em tarefas repetitivas sem perder feedback, continuidade e acessibilidade.</p>
+      <div class="meta-row">
+        <div><span class="mono-label k">Produto</span><span>Dashboard SaaS operacional de alta frequência</span></div>
+        <div><span class="mono-label k">Stack</span><span>React · TypeScript · Tailwind CSS</span></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="num">3</div><div class="mono-label lbl">Achados</div></div>
+        <div class="stat crit"><a href="#rec-crit"><div class="num">0</div><div class="mono-label lbl">Críticos</div></a></div>
+        <div class="stat imp"><a href="#rec-imp"><div class="num">0</div><div class="mono-label lbl">Importantes</div></a></div>
+        <div class="stat opp"><a href="#rec-opp"><div class="num">3</div><div class="mono-label lbl">Oportunidades</div></a></div>
+      </div>
+    </header>
+
+    <section class="assessment">
+      <span class="mono-label">Avaliação geral</span>
+      <p>O protótipo já parece uma ferramenta operacional, não uma vitrine. As ações frequentes são rápidas, o progresso comunica mudança real e os carregamentos funcionais têm alternativa sem movimento. <em>A principal qualidade é a contenção.</em></p>
+    </section>
+
+    <section>
+      <div class="sec-index">01</div>
+      <h2>Leitura pelas três perspectivas</h2>
+      <p class="section-sub">A ponderação já aprovada para o GSDock coloca Emil como lente principal, Jakub como secundária e Jhey apenas em momentos raros.</p>
+      <table>
+        <thead><tr><th>Lente</th><th>Veredito</th><th>Leitura</th></tr></thead>
+        <tbody>
+          <tr><td class="lens-name">Restraint &amp; Speed<span class="who">Emil Kowalski</span><span class="weight">Principal</span></td><td><span class="verdict">Forte</span></td><td>160–220ms, nenhuma navegação cinematográfica e movimento desligado quando a origem é teclado.</td></tr>
+          <tr><td class="lens-name">Production Polish<span class="who">Jakub Krehel</span><span class="weight">Secundária</span></td><td><span class="verdict">Forte</span></td><td>Estados de progresso vivem no controle acionado; skeletons preservam a geometria e o easing é deliberado.</td></tr>
+          <tr><td class="lens-name">Experimentation &amp; Delight<span class="who">Jhey Tompkins</span><span class="weight">Seletiva</span></td><td><span class="verdict">Forte</span></td><td>A interface guarda espaço para uma celebração rara, sem contaminar a rotina com efeitos decorativos.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <div class="sec-index">02</div>
+      <h2>Onde os tempos ficam</h2>
+      <p class="section-sub">Todos os movimentos interativos ficam na faixa responsiva. O shimmer e o giro de carregamento não são latência imposta: duram somente enquanto existe trabalho assíncrono e são removidos em reduced motion.</p>
+      <div class="timing-grid">
+        <svg class="timing-figure" viewBox="0 0 660 250" role="img" aria-label="Escala de zero a seiscentos milissegundos com movimentos do GSDock entre 160 e 220 milissegundos">
+          <style>.track{fill:var(--surface-2);stroke:var(--line-strong)}.grid{stroke:var(--line-strong);stroke-dasharray:2 5}.axis{fill:var(--faint);font:11px var(--mono)}.dot{fill:var(--t-good)}.dottext{fill:var(--ink);font:600 11px var(--mono)}.zone{fill:var(--t-good);font:9.5px var(--mono);letter-spacing:1.5px}</style>
+          <rect class="track" x="40" y="96" width="600" height="58" rx="10"/>
+          <g class="grid"><line x1="140" y1="90" x2="140" y2="160"/><line x1="340" y1="90" x2="340" y2="160"/><line x1="540" y1="90" x2="540" y2="160"/></g>
+          <g class="axis" text-anchor="middle"><text x="40" y="185">0</text><text x="140" y="185">100</text><text x="340" y="185">300</text><text x="540" y="185">500</text><text x="635" y="185">600ms</text></g>
+          <g class="zone"><text x="90" y="82" text-anchor="middle">INSTANTÂNEO</text><text x="240" y="82" text-anchor="middle">RESPONSIVO</text></g>
+          <g text-anchor="middle"><circle class="dot" cx="200" cy="125" r="12"/><text class="dottext" x="200" y="129">1</text><circle class="dot" cx="260" cy="125" r="12"/><text class="dottext" x="260" y="129">2</text></g>
+        </svg>
+        <div>
+          <ol class="key-list">
+            <li><span class="kn">1</span><span>Navegação, hover e press</span><span class="kt">160ms</span></li>
+            <li><span class="kn">2</span><span>Progresso linear e circular</span><span class="kt">220ms</span></li>
+          </ol>
+          <p class="timing-note"><span class="mono-label">O que está correto</span><br>Não há movimento acima de 300ms nas tarefas. Teclado e <code>prefers-reduced-motion</code> reduzem os tokens para 0,01ms.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lens-sec">
+      <div class="sec-index">03</div>
+      <div class="lens-head"><h3>Emil Kowalski — Restraint &amp; Speed</h3><span class="lens-chip">Lente principal</span></div>
+      <p><span class="verdict">Forte</span></p>
+      <div class="lens-block"><span class="mono-label">O que funciona bem</span><ul class="lens-list good"><li><span class="mk">✓</span><span>Ações recorrentes usam 160ms e uma curva de saída definida, sem bounce. <code>src/styles.css:36</code></span></li><li><span class="mk">✓</span><span>Qualquer evento de teclado reduz durações e remove press transform, shimmer e spinner. <code>src/styles.css:213</code></span></li><li><span class="mk">✓</span><span>Navegação entre áreas permanece instantânea, escolha adequada para um utilitário de alta frequência. <code>src/app/app.tsx:55</code></span></li></ul></div>
+      <div class="lens-block"><span class="mono-label">Problemas a tratar</span><p class="lens-empty">Nenhum problema crítico ou importante encontrado.</p></div>
+      <div class="lens-block"><span class="mono-label">Oportunidades</span><ul class="lens-list opp"><li><span class="mk">💡</span><span>Quando o carregamento vier de uma API real, avaliar um crossfade de até 140ms entre skeleton e dados, somente em origem não-teclado. <code>src/app/app.tsx:42</code></span></li></ul></div>
+      <div class="lens-take"><span class="mono-label">Pela lente de Emil</span><p>A interface respeita a frequência da tarefa. O movimento informa pressão, progresso e espera; ele não cobra tempo para navegar ou pesquisar.</p></div>
+    </section>
+
+    <section class="lens-sec">
+      <div class="sec-index">04</div>
+      <div class="lens-head"><h3>Jakub Krehel — Production Polish</h3><span class="lens-chip">Lente secundária</span></div>
+      <p><span class="verdict">Forte</span></p>
+      <div class="lens-block"><span class="mono-label">O que funciona bem</span><ul class="lens-list good"><li><span class="mk">✓</span><span>O progresso circular e linear compartilha 220ms e a mesma curva, criando continuidade visual. <code>src/styles.css:151</code></span></li><li><span class="mk">✓</span><span>Botões assíncronos preservam largura, bloqueiam duplicidade, mostram spinner e expõem <code>aria-busy</code>. <code>src/pages/picking-page.tsx:264</code></span></li><li><span class="mk">✓</span><span>Skeletons aproximam a geometria real em vez de esconder toda a tela atrás de um spinner. <code>src/components/ui/skeleton.tsx:8</code></span></li></ul></div>
+      <div class="lens-block"><span class="mono-label">Problemas a tratar</span><p class="lens-empty">Nenhum problema crítico ou importante encontrado.</p></div>
+      <div class="lens-block"><span class="mono-label">Oportunidades</span><ul class="lens-list opp"><li><span class="mk">💡</span><span>Se a confirmação total da onda ganhar uma tela própria, usar uma transição curta de conclusão para ligar o último SKU ao resumo, sem animar cada linha. <code>src/pages/picking-page.tsx:123</code></span></li></ul></div>
+      <div class="lens-take"><span class="mono-label">Pela lente de Jakub</span><p>O acabamento vem da consistência entre controle, progresso e resultado. O próximo ganho deve surgir em fluxos completos, não em efeitos distribuídos pelos cards.</p></div>
+    </section>
+
+    <section class="lens-sec">
+      <div class="sec-index">05</div>
+      <div class="lens-head"><h3>Jhey Tompkins — Experimentation &amp; Delight</h3><span class="lens-chip">Lente seletiva</span></div>
+      <p><span class="verdict">Forte</span></p>
+      <div class="lens-block"><span class="mono-label">O que funciona bem</span><ul class="lens-list good"><li><span class="mk">✓</span><span>O protótipo não usa pulso, parallax, stagger, 3D, zoom amplo ou atenção artificial.</span></li><li><span class="mk">✓</span><span>A opção futura de leitura por câmera aparece como capacidade, não como efeito cenográfico. <code>src/pages/picking-page.tsx:99</code></span></li></ul></div>
+      <div class="lens-block"><span class="mono-label">Problemas a tratar</span><p class="lens-empty">Nenhum problema crítico ou importante encontrado.</p></div>
+      <div class="lens-block"><span class="mono-label">Oportunidades</span><ul class="lens-list opp"><li><span class="mk">💡</span><span>Reservar uma única animação de descoberta para o primeiro uso real do leitor de código; ela deve ocorrer uma vez, ensinar o enquadramento e desaparecer. <code>src/pages/picking-page.tsx:99</code></span></li></ul></div>
+      <div class="lens-take"><span class="mono-label">Pela lente de Jhey</span><p>A ausência de espetáculo na rotina é uma força. O lugar futuro para experimentar é o primeiro scan bem-sucedido, uma experiência rara e instrutiva.</p></div>
+    </section>
+
+    <section>
+      <div class="sec-index">06</div>
+      <h2>Recomendações combinadas</h2>
+      <div class="rec crit" id="rec-crit"><div class="tier-label"><span class="mono-label">Crítico · corrigir</span><span class="rule"></span><span>0</span></div><table class="rec-table"><tbody><tr><td class="empty-row">Nenhum achado crítico.</td></tr></tbody></table></div>
+      <div class="rec imp" id="rec-imp"><div class="tier-label"><span class="mono-label">Importante · corrigir</span><span class="rule"></span><span>0</span></div><table class="rec-table"><tbody><tr><td class="empty-row">Nenhum achado importante.</td></tr></tbody></table></div>
+      <div class="rec opp" id="rec-opp"><div class="tier-label"><span class="mono-label">Oportunidades · evoluir</span><span class="rule"></span><span>3</span></div><table class="rec-table"><thead><tr><th>Evolução</th><th>Onde</th><th>Impacto</th></tr></thead><tbody><tr><td>Crossfade do dado real</td><td><code>app.tsx</code></td><td>Suaviza skeleton → conteúdo sem atrasar teclado.</td></tr><tr><td>Conclusão rara da onda</td><td><code>picking-page.tsx</code></td><td>Conecta o último SKU ao resumo operacional.</td></tr><tr><td>Descoberta do primeiro scan</td><td><code>picking-page.tsx</code></td><td>Ensina câmera/leitor uma única vez.</td></tr></tbody></table></div>
+    </section>
+
+    <section>
+      <div class="sec-index">07</div>
+      <h2>Qual lente conduziu a auditoria</h2>
+      <div class="ref-summary"><span class="mono-label">Mais referenciada</span><p class="big">Emil Kowalski — Restraint &amp; Speed</p><p class="why">Separar e consultar estoque são ações repetidas centenas de vezes. A auditoria priorizou tempo, interrupção, teclado e ausência de movimento decorativo; Jakub refinou o feedback e Jhey delimitou os únicos momentos futuros de descoberta.</p><ul class="ref-lean"><li><strong>Inclinar para Emil</strong><span>Manter navegação instantânea e questionar qualquer duração acima de 220ms.</span></li><li><strong>Inclinar para Jakub</strong><span>Adicionar continuidade somente quando surgirem modais, drawers e transições assíncronas reais.</span></li><li><strong>Inclinar para Jhey</strong><span>Investir no primeiro scan e na conclusão rara de uma onda, nunca na repetição por SKU.</span></li></ul></div>
+    </section>
+
+    <footer><span>GSDock motion audit · design-motion-principles</span><span>3 oportunidades · 0 críticos · 0 importantes</span></footer>
+  </div>
+</body>
+</html>
